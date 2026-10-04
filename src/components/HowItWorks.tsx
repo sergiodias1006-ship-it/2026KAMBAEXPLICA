@@ -9,6 +9,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import { ThreeDCard } from './ThreeDCard';
 
 export const HowItWorks: React.FC = () => {
   const { setActiveView, setIsAuthModalOpen, setAuthModalTab } = useApp();
@@ -46,85 +47,97 @@ export const HowItWorks: React.FC = () => {
 
       {tab === 'student' ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FFC72C]">
-              <Search className="w-6 h-6" />
+          <ThreeDCard depth={10} glowColor="rgba(255, 199, 44, 0.15)">
+            <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors h-full">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FFC72C]">
+                <Search className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-mono text-slate-400">01. Encontre o Explicador Ideal</span>
+                <h3 className="text-lg font-bold text-white mt-1">Filtre por Cadeira e Província</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Pesquise por Análise Matemática, Física, Direito, Contabilidade ou qualquer matéria. Veja avaliações reais de outros estudantes e selo de verificação.
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-mono text-slate-400">01. Encontre o Explicador Ideal</span>
-              <h3 className="text-lg font-bold text-white mt-1">Filtre por Cadeira e Província</h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Pesquise por Análise Matemática, Física, Direito, Contabilidade ou qualquer matéria. Veja avaliações reais de outros estudantes e selo de verificação.
-              </p>
-            </div>
-          </div>
+          </ThreeDCard>
 
-          <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#E02636]">
-              <Calendar className="w-6 h-6" />
+          <ThreeDCard depth={10} glowColor="rgba(224, 38, 54, 0.15)">
+            <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors h-full">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#E02636]">
+                <Calendar className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-mono text-slate-400">02. Agende o Horário</span>
+                <h3 className="text-lg font-bold text-white mt-1">Online ou Presencial</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Escolha o dia e hora que melhor se adequam à sua rotina. Pode escolher aula virtual com link direto ou presencial numa biblioteca/campus de Luanda.
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-mono text-slate-400">02. Agende o Horário</span>
-              <h3 className="text-lg font-bold text-white mt-1">Online ou Presencial</h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Escolha o dia e hora que melhor se adequam à sua rotina. Pode escolher aula virtual com link direto ou presencial numa biblioteca/campus de Luanda.
-              </p>
-            </div>
-          </div>
+          </ThreeDCard>
 
-          <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400">
-              <CreditCard className="w-6 h-6" />
+          <ThreeDCard depth={10} glowColor="rgba(16, 185, 129, 0.15)">
+            <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors h-full">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400">
+                <CreditCard className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-mono text-slate-400">03. Pague com Multicaixa Express</span>
+                <h3 className="text-lg font-bold text-white mt-1">Segurança Total em Kwanzas</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Insira o seu número e confirme o PIN na app do seu telemóvel. O dinheiro fica protegido até a aula ser realizada com satisfação garantida.
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-mono text-slate-400">03. Pague com Multicaixa Express</span>
-              <h3 className="text-lg font-bold text-white mt-1">Segurança Total em Kwanzas</h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Insira o seu número e confirme o PIN na app do seu telemóvel. O dinheiro fica protegido até a aula ser realizada com satisfação garantida.
-              </p>
-            </div>
-          </div>
+          </ThreeDCard>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FFC72C]">
-              <GraduationCap className="w-6 h-6" />
+          <ThreeDCard depth={10} glowColor="rgba(255, 199, 44, 0.15)">
+            <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors h-full">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#FFC72C]">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-mono text-slate-400">01. Crie o Seu Perfil</span>
+                <h3 className="text-lg font-bold text-white mt-1">Validação de Habilitações</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Indique a sua formação universitária (UAN, ISPTEC, UCAN, etc.), anos de experiência e envie o seu documento para obter o Selo de Explicador Verificado.
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-mono text-slate-400">01. Crie o Seu Perfil</span>
-              <h3 className="text-lg font-bold text-white mt-1">Validação de Habilitações</h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Indique a sua formação universitária (UAN, ISPTEC, UCAN, etc.), anos de experiência e envie o seu documento para obter o Selo de Explicador Verificado.
-              </p>
-            </div>
-          </div>
+          </ThreeDCard>
 
-          <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#E02636]">
-              <Calendar className="w-6 h-6" />
+          <ThreeDCard depth={10} glowColor="rgba(224, 38, 54, 0.15)">
+            <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors h-full">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[#E02636]">
+                <Calendar className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-mono text-slate-400">02. Defina os Seus Preços</span>
+                <h3 className="text-lg font-bold text-white mt-1">Autonomia e Flexibilidade</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Defina o seu preço por hora (a partir de 2.000 Kz) e os seus dias livres na semana. Aceite ou recuse pedidos de acordo com a sua disponibilidade.
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-mono text-slate-400">02. Defina os Seus Preços</span>
-              <h3 className="text-lg font-bold text-white mt-1">Autonomia e Flexibilidade</h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Defina o seu preço por hora (a partir de 2.000 Kz) e os seus dias livres na semana. Aceite ou recuse pedidos de acordo com a sua disponibilidade.
-              </p>
-            </div>
-          </div>
+          </ThreeDCard>
 
-          <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors">
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400">
-              <ShieldCheck className="w-6 h-6" />
+          <ThreeDCard depth={10} glowColor="rgba(16, 185, 129, 0.15)">
+            <div className="p-6 rounded-2xl bg-[#161B22] border border-white/10 space-y-4 hover:border-[#FFC72C]/40 transition-colors h-full">
+              <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400">
+                <ShieldCheck className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="text-xs font-mono text-slate-400">03. Receba Diretamente</span>
+                <h3 className="text-lg font-bold text-white mt-1">Gere Renda Recorrente</h3>
+                <p className="text-xs text-slate-300 mt-2 leading-relaxed">
+                  Receba os pagamentos diretamente na sua conta bancária angolana (BAI, BFA, BIC) sem atrasos ou calotes. Construa uma reputação de topo.
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-mono text-slate-400">03. Receba Diretamente</span>
-              <h3 className="text-lg font-bold text-white mt-1">Gere Renda Recorrente</h3>
-              <p className="text-xs text-slate-300 mt-2 leading-relaxed">
-                Receba os pagamentos diretamente na sua conta bancária angolana (BAI, BFA, BIC) sem atrasos ou calotes. Construa uma reputação de topo.
-              </p>
-            </div>
-          </div>
+          </ThreeDCard>
         </div>
       )}
 

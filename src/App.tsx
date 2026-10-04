@@ -19,10 +19,17 @@ import { AuthModal } from './components/AuthModal';
 import { ReviewModal } from './components/ReviewModal';
 import { SupportModal } from './components/SupportModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
-import { Sparkles, ArrowRight, ShieldCheck, CreditCard, GraduationCap } from 'lucide-react';
+import { Smartphone3DModal } from './components/Smartphone3DModal';
+import { Sparkles, ArrowRight, ShieldCheck, CreditCard, GraduationCap, Smartphone } from 'lucide-react';
 
 const MainContent: React.FC = () => {
-  const { activeView, setActiveView, setIsAuthModalOpen, setAuthModalTab } = useApp();
+  const { 
+    activeView, 
+    setActiveView, 
+    setIsAuthModalOpen, 
+    setAuthModalTab,
+    setIsSmartphoneMode 
+  } = useApp();
 
   return (
     <div className="min-h-screen bg-[#0D0F12] text-slate-100 flex flex-col font-sans">
@@ -113,6 +120,22 @@ const MainContent: React.FC = () => {
 
       <Footer />
 
+      {/* Floating 3D Smartphone Mode Launcher (Bottom Left) */}
+      <div className="fixed bottom-5 left-5 z-40">
+        <button
+          onClick={() => setIsSmartphoneMode(true)}
+          className="px-4 py-2.5 rounded-full bg-[#161B22]/95 hover:bg-[#1C222B] text-white border border-[#FFC72C]/40 hover:border-[#FFC72C] shadow-2xl backdrop-blur-md flex items-center gap-2 text-xs font-bold transition-all transform hover:scale-105 group"
+          title="Abrir Simulador 3D Smartphone"
+        >
+          <div className="w-5 h-5 rounded-md bg-[#FFC72C] flex items-center justify-center text-black">
+            <Smartphone className="w-3.5 h-3.5 text-black group-hover:rotate-12 transition-transform" />
+          </div>
+          <span className="hidden sm:inline">Modo Smartphone 3D</span>
+          <span className="sm:hidden">3D Phone</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+        </button>
+      </div>
+
       {/* Global Modals & Interactive Drawers */}
       <TutorProfileModal />
       <BookingModal />
@@ -121,6 +144,33 @@ const MainContent: React.FC = () => {
       <ReviewModal />
       <SupportModal />
       <FloatingWhatsApp />
+
+      {/* 3D Smartphone Simulator Modal */}
+      <Smartphone3DModal>
+        <div className="space-y-6 p-3">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-[#E02636]/80 to-[#161B22] border border-white/10 text-white space-y-2">
+            <div className="flex items-center gap-2 text-[10px] text-amber-300 font-bold uppercase">
+              <Sparkles className="w-3 h-3" />
+              <span>KAMBAEXPLICA Mobile</span>
+            </div>
+            <h3 className="text-base font-bold font-display leading-tight">
+              Os melhores explicadores de Angola no seu bolso
+            </h3>
+            <p className="text-[11px] text-slate-200">
+              Pagamento via Multicaixa Express e agendamento instantâneo.
+            </p>
+          </div>
+
+          <SubjectGrid />
+          <TutorGrid 
+            limit={3} 
+            title="Destaques Mobile" 
+            subtitle="Explicadores recomendados para aulas online ou presenciais" 
+            showFilters={false} 
+          />
+          <HowItWorks />
+        </div>
+      </Smartphone3DModal>
     </div>
   );
 };

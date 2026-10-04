@@ -13,6 +13,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { POPULAR_SUBJECTS } from '../data/mockData';
+import { ThreeDCard } from './ThreeDCard';
 
 const iconMap: Record<string, React.ReactNode> = {
   Calculator: <Calculator className="w-5 h-5 text-[#FFC72C]" />,
@@ -68,36 +69,39 @@ export const SubjectGrid: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {POPULAR_SUBJECTS.map((sub) => (
-          <div
-            key={sub.id}
-            onClick={() => handleSelectSubject(sub.name)}
-            className="group cursor-pointer p-5 rounded-xl bg-[#161B22] border border-white/10 hover:border-[#FFC72C]/40 hover:bg-[#1C222B] transition-all duration-200"
-          >
-            <div className="flex items-start justify-between">
-              <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 group-hover:scale-110 transition-transform">
-                {iconMap[sub.iconName] || <BookOpen className="w-5 h-5 text-white" />}
+          <ThreeDCard key={sub.id} depth={8} glowColor="rgba(224, 38, 54, 0.12)">
+            <div
+              onClick={() => handleSelectSubject(sub.name)}
+              className="group cursor-pointer p-5 rounded-xl bg-[#161B22] border border-white/10 hover:border-[#FFC72C]/40 hover:bg-[#1C222B] transition-all duration-200 h-full flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-start justify-between">
+                  <div className="p-2.5 rounded-lg bg-black/40 border border-white/5 group-hover:scale-110 transition-transform">
+                    {iconMap[sub.iconName] || <BookOpen className="w-5 h-5 text-white" />}
+                  </div>
+                  <span className="text-xs text-slate-400 tabular-nums">
+                    {sub.tutorCount} explicadores
+                  </span>
+                </div>
+
+                <h3 className="mt-4 text-base font-semibold text-white group-hover:text-[#FFC72C] transition-colors">
+                  {sub.name}
+                </h3>
+
+                <p className="mt-1.5 text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                  {sub.description}
+                </p>
               </div>
-              <span className="text-xs text-slate-400 tabular-nums">
-                {sub.tutorCount} explicadores
-              </span>
+
+              <div className="mt-3.5 pt-3 border-t border-white/5 flex flex-wrap gap-1 text-[11px] text-slate-400">
+                {sub.examples.slice(0, 2).map((ex, idx) => (
+                  <span key={idx} className="text-slate-400">
+                    {ex} {idx === 0 ? '·' : ''}
+                  </span>
+                ))}
+              </div>
             </div>
-
-            <h3 className="mt-4 text-base font-semibold text-white group-hover:text-[#FFC72C] transition-colors">
-              {sub.name}
-            </h3>
-
-            <p className="mt-1.5 text-xs text-slate-400 line-clamp-2 leading-relaxed">
-              {sub.description}
-            </p>
-
-            <div className="mt-3.5 pt-3 border-t border-white/5 flex flex-wrap gap-1 text-[11px] text-slate-400">
-              {sub.examples.slice(0, 2).map((ex, idx) => (
-                <span key={idx} className="text-slate-400">
-                  {ex} {idx === 0 ? '·' : ''}
-                </span>
-              ))}
-            </div>
-          </div>
+          </ThreeDCard>
         ))}
       </div>
     </section>

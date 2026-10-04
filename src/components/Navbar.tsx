@@ -10,7 +10,8 @@ import {
   Sparkles,
   LogOut,
   RefreshCw,
-  HelpCircle
+  HelpCircle,
+  Smartphone
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -23,7 +24,9 @@ export const Navbar: React.FC = () => {
     setAuthModalTab,
     setIsSupportModalOpen,
     switchDemoRole,
-    resetDatabase
+    resetDatabase,
+    isSmartphoneMode,
+    setIsSmartphoneMode
   } = useApp();
 
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -87,7 +90,21 @@ export const Navbar: React.FC = () => {
         </nav>
 
         {/* Zone 3: 1-2 Primary actions & Profile / Role switcher */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          {/* 3D Smartphone Mode Toggle Button */}
+          <button
+            onClick={() => setIsSmartphoneMode(!isSmartphoneMode)}
+            className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-all flex items-center gap-1.5 shadow-sm ${
+              isSmartphoneMode
+                ? 'bg-[#FFC72C] text-black border-[#FFC72C]'
+                : 'bg-white/5 hover:bg-white/10 text-amber-300 border-amber-400/30 hover:border-amber-400/60'
+            }`}
+            title="Alternar Modo Smartphone 3D (Simulador móvel interativo)"
+          >
+            <Smartphone className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Modo Smartphone 3D</span>
+          </button>
+
           {/* Quick Persona Switcher for demo & evaluators */}
           <div className="hidden lg:flex items-center bg-white/5 border border-white/10 rounded-lg p-0.5 text-xs">
             <button

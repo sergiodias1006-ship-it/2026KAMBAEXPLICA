@@ -1,6 +1,7 @@
 import React from 'react';
 import { TutorProfile } from '../types';
 import { useApp } from '../context/AppContext';
+import { ThreeDCard } from './ThreeDCard';
 import { 
   Star, 
   ShieldCheck, 
@@ -47,10 +48,11 @@ export const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
   };
 
   return (
-    <div 
-      onClick={() => setActiveTutorForProfile(tutor)}
-      className="group cursor-pointer rounded-2xl bg-[#161B22] border border-white/10 hover:border-[#FFC72C]/40 hover:bg-[#1C222B] transition-all duration-200 flex flex-col justify-between overflow-hidden shadow-lg"
-    >
+    <ThreeDCard depth={10} glowColor="rgba(255, 199, 44, 0.12)">
+      <div 
+        onClick={() => setActiveTutorForProfile(tutor)}
+        className="group cursor-pointer rounded-2xl bg-[#161B22] border border-white/10 hover:border-[#FFC72C]/40 hover:bg-[#1C222B] transition-all duration-200 flex flex-col justify-between overflow-hidden shadow-lg h-full"
+      >
       <div className="p-5">
         {/* Header: Photo + Info + Favorite */}
         <div className="flex items-start gap-4">
@@ -174,5 +176,6 @@ export const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
         </div>
       </div>
     </div>
+    </ThreeDCard>
   );
 };

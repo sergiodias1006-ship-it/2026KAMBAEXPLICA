@@ -54,6 +54,8 @@ interface AppContextType {
   setTutorToReview: (tutor: TutorProfile | null) => void;
   activeView: 'home' | 'tutors' | 'dashboard' | 'subjects';
   setActiveView: (view: 'home' | 'tutors' | 'dashboard' | 'subjects') => void;
+  isSmartphoneMode: boolean;
+  setIsSmartphoneMode: (mode: boolean) => void;
 
   // Actions
   toggleFavorite: (tutorId: string) => void;
@@ -151,6 +153,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [tutorToReview, setTutorToReview] = useState<TutorProfile | null>(null);
   const [activeView, setActiveView] = useState<'home' | 'tutors' | 'dashboard' | 'subjects'>('home');
+  const [isSmartphoneMode, setIsSmartphoneMode] = useState(false);
 
   // Sync to localStorage
   useEffect(() => {
@@ -482,6 +485,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setTutorToReview,
         activeView,
         setActiveView,
+        isSmartphoneMode,
+        setIsSmartphoneMode,
         toggleFavorite,
         registerStudent,
         registerTutor,
