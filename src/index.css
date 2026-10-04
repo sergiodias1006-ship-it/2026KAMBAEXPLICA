@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+  
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* Angolan dynamic line background styling */
+.angola-pattern-grid {
+  background-image: radial-gradient(rgba(224, 38, 54, 0.08) 1px, transparent 1px), 
+                    radial-gradient(rgba(255, 199, 44, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+}
+
+.angola-line-sheen {
+  background: linear-gradient(90deg, 
+    rgba(224, 38, 54, 0) 0%, 
+    rgba(224, 38, 54, 0.25) 30%, 
+    rgba(255, 199, 44, 0.3) 50%, 
+    rgba(224, 38, 54, 0.25) 70%, 
+    rgba(224, 38, 54, 0) 100%
+  );
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d0f12;
+}
+::-webkit-scrollbar-thumb {
+  background: #272f3d;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e02636;
+}

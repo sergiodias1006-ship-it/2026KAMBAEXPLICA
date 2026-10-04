@@ -1,0 +1,6 @@
+{
+  "name": "KAMBAEXPLICA - Plataforma de Explicações em Angola",
+  "description": "Conectando estudantes do ensino secundário e universitário aos melhores explicadores e professores qualificados de Angola.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
