@@ -12,6 +12,7 @@ import {
   BookOpen
 } from 'lucide-react';
 import { ANGOLAN_PROVINCES, LUANDA_MUNICIPALITIES } from '../data/mockData';
+import { Student3DHeroContainer } from './Student3DHeroContainer';
 
 export const Hero: React.FC = () => {
   const { 
@@ -108,31 +109,9 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Visual Hero Asset featuring Angolan students */}
+          {/* Right Column: Framer Motion 3D Interactive Rotating Student Container */}
           <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none rounded-2xl overflow-hidden border border-white/15 bg-slate-900 shadow-2xl">
-              <img
-                src="/src/assets/images/hero_angola_students_1791076323396.jpg"
-                alt="Estudantes angolanos em contexto de estudo universitário em Luanda"
-                referrerPolicy="no-referrer"
-                className="w-full h-[360px] sm:h-[420px] object-cover hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-
-              {/* Context overlay badge with Angolan nostalgia/pride */}
-              <div className="absolute bottom-4 left-4 right-4 p-3.5 rounded-xl bg-[#161B22]/90 border border-white/10 backdrop-blur-md">
-                <div className="flex items-center justify-between text-xs text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping" />
-                    <span className="font-semibold text-white">Comunidade Académica Angolana</span>
-                  </div>
-                  <span className="text-[#FFC72C] font-semibold">Luanda & Províncias</span>
-                </div>
-                <p className="mt-1 text-xs text-slate-400">
-                  Aulas presenciais em Talatona, Maianga, Kilamba ou online em todo o território nacional.
-                </p>
-              </div>
-            </div>
+            <Student3DHeroContainer />
           </div>
 
         </div>
