@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 import { SubjectCategory } from '../types';
 
 // Credenciais do projeto Supabase fornecidas
-const defaultUrl = 'https://supabase.co';
-const defaultAnonKey = 'COLE_AQUI_A_SUA_CHAVE_ANON_PUBLIC';
+const defaultUrl = 'https://rocmobtfbbswrlmimwtq.supabase.co';
+const defaultAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvY21vYnRmYmJzd3JsbWltd3RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzNjM4ODksImV4cCI6MjEwNzkzOTg4OX0.rLx4vAsuhyChQO_ZicLHWysYyVJR2_O8991hJ4sY-SM';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || defaultUrl;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || defaultAnonKey;
@@ -33,17 +33,42 @@ export const supabaseService = {
         return null;
       }
 
-      // Mapeamento normalizado para a interface SubjectCategory
-      return data.map((item: any) => ({
-        id: String(item.id || item.name.toLowerCase().replace(/\s+/g, '-')),
-        name: item.name,
-        category: item.category || 'Geral',
-        description: item.description || `Aulas de apoio e explicações de ${item.name}`,
-        iconName: item.icon_name || item.iconName || 'BookOpen',
-        popular: Boolean(item.popular ?? true),
-        tutorCount: Number(item.tutor_count || item.tutorCount || 10),
-        examples: Array.isArray(item.examples) ? item.examples : (item.examples ? [item.examples] : ['Ensino Secundário', 'Universidade'])
-      }));
+      // Mapeamento normalizado compatível com colunas em português (nome/categoria) e inglês (name/category)
+      return data.map((item: any) => {
+        const name = item.nome || item.name || 'Disciplina';
+        const category = item.categoria || item.category || 'Geral';
+        const description = item.descricao || item.description || `Aulas de apoio e explicações de ${name} (${category})`;
+        const id = String(item.id || name.toLowerCase().replace(/\s+/g, '-'));
+
+        let iconName = item.icone || item.icon_name || item.iconName;
+        if (!iconName) {
+          const lower = name.toLowerCase();
+          if (lower.includes('matemática') || lower.includes('cálculo') || lower.includes('álgebra')) iconName = 'Calculator';
+          else if (lower.includes('física') || lower.includes('mecânica')) iconName = 'Atom';
+          else if (lower.includes('química')) iconName = 'FlaskConical';
+          else if (lower.includes('direito') || lower.includes('jurídico')) iconName = 'Scale';
+          else if (lower.includes('contabilidade') || lower.includes('gestão')) iconName = 'Briefcase';
+          else if (lower.includes('economia') || lower.includes('finanças')) iconName = 'TrendingUp';
+          else if (lower.includes('programação') || lower.includes('informática')) iconName = 'Code';
+          else if (lower.includes('estatística')) iconName = 'BarChart2';
+          else iconName = 'BookOpen';
+        }
+
+        return {
+          id,
+          name,
+          category,
+          description,
+          iconName,
+          popular: Boolean(item.popular ?? true),
+          tutorCount: Number(item.tutor_count || item.tutorCount || 15),
+          examples: Array.isArray(item.exemplos)
+            ? item.exemplos
+            : Array.isArray(item.examples)
+            ? item.examples
+            : [category, 'Ensino Secundário', 'Universidade']
+        };
+      });
     } catch (err) {
       console.warn('Erro ao comunicar com o cliente Supabase:', err);
       return null;

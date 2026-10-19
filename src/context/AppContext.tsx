@@ -234,7 +234,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       // Carregar disciplinas do Supabase para o ecrã principal
       supabaseService.getDisciplinas().then(disciplinas => {
         if (disciplinas && disciplinas.length > 0) {
-          setSubjects(disciplinas);
+          const supabaseNames = new Set(disciplinas.map(d => d.name.toLowerCase()));
+          const remaining = POPULAR_SUBJECTS.filter(d => !supabaseNames.has(d.name.toLowerCase()));
+          setSubjects([...disciplinas, ...remaining]);
         }
       }).catch(err => console.warn('Supabase getDisciplinas fetch notice:', err));
     }
@@ -244,7 +246,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       const liveDisciplinas = await supabaseService.getDisciplinas();
       if (liveDisciplinas && liveDisciplinas.length > 0) {
-        setSubjects(liveDisciplinas);
+        const supabaseNames = new Set(liveDisciplinas.map(d => d.name.toLowerCase()));
+        const remaining = POPULAR_SUBJECTS.filter(d => !supabaseNames.has(d.name.toLowerCase()));
+        setSubjects([...liveDisciplinas, ...remaining]);
       }
     } catch (err) {
       console.warn('Erro ao recarregar disciplinas do Supabase:', err);
