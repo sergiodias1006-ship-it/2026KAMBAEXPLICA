@@ -20,10 +20,12 @@ import {
   DEMO_STUDENT_USER,
   DEMO_TUTOR_USER
 } from '../data/mockData';
+import { isSupabaseConfigured, supabaseService } from '../lib/supabase';
 
 interface AppContextType {
   currentUser: User | null;
   setCurrentUser: (user: User | null) => void;
+  isSupabaseConnected: boolean;
   tutors: TutorProfile[];
   subjects: SubjectCategory[];
   reviews: Review[];
@@ -56,6 +58,7 @@ interface AppContextType {
   setActiveView: (view: 'home' | 'tutors' | 'dashboard' | 'subjects') => void;
   isSmartphoneMode: boolean;
   setIsSmartphoneMode: (mode: boolean) => void;
+  reloadDisciplinas: () => Promise<void>;
 
   // Actions
   toggleFavorite: (tutorId: string) => void;
@@ -114,7 +117,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return saved ? JSON.parse(saved) : INITIAL_TUTORS;
   });
 
-  const [subjects] = useState<SubjectCategory[]>(POPULAR_SUBJECTS);
+  const [subjects, setSubjects] = useState<SubjectCategory[]>(POPULAR_SUBJECTS);
 
   const [reviews, setReviews] = useState<Review[]>(() => {
     const saved = localStorage.getItem(`${STORAGE_KEY}reviews`);
@@ -185,6 +188,68 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     localStorage.setItem(`${STORAGE_KEY}favorites`, JSON.stringify(favorites));
   }, [favorites]);
+
+  // Sincronização inicial com Supabase se as chaves estiverem configuradas
+  useEffect(() => {
+    if (isSupabaseConfigured) {
+      supabaseService.getTutors().then(data => {
+        if (data && data.length > 0) {
+          const mappedTutors: TutorProfile[] = data.map((d: any) => ({
+            id: d.id,
+            userId: d.user_id || `user-${d.id}`,
+            name: d.name,
+            title: d.title,
+            avatar: d.avatar_url || '/src/assets/images/tutor_portrait_male_1791076346477.jpg',
+            bio: d.bio || '',
+            academicDegree: d.academic_degree || 'Licenciatura',
+            institution: d.institution || 'Universidade em Angola',
+            specialization: d.specialization || '',
+            subjects: d.subjects || ['Matemática e Cálculo'],
+            educationLevelsTaught: d.education_levels_taught || ['Ensino Secundário', 'Licenciatura'],
+            experienceYears: d.experience_years || 2,
+            pricePerHour: Number(d.price_per_hour) || 3000,
+            modalities: d.modalities || 'ambos',
+            province: d.province || 'Luanda',
+            municipality: d.municipality || 'Talatona',
+            rating: Number(d.rating) || 5.0,
+            reviewCount: Number(d.review_count) || 0,
+            successRate: Number(d.success_rate) || 95,
+            hiredCount: Number(d.hired_count) || 0,
+            verified: Boolean(d.verified),
+            idDocumentType: 'Bilhete de Identidade (BI)',
+            idDocumentNumber: d.id_document_number || '',
+            phone: d.phone || '+244 923 000 000',
+            whatsapp: d.whatsapp || (d.phone ? d.phone.replace(/[^0-9]/g, '') : ''),
+            availability: d.availability || { 'Segunda': ['09:00', '14:00'], 'Quarta': ['10:00', '15:00'] },
+            packages: [
+              { id: `p-${d.id}-1`, name: 'Aula Individual', lessons: 1, discountPercent: 0, priceKz: Number(d.price_per_hour) || 3000 },
+              { id: `p-${d.id}-2`, name: 'Pack Mensal (4 Aulas)', lessons: 4, discountPercent: 10, priceKz: (Number(d.price_per_hour) || 3000) * 4 * 0.9, popular: true }
+            ],
+            certificates: []
+          }));
+          setTutors(mappedTutors);
+        }
+      }).catch(err => console.warn('Supabase fetch:', err));
+
+      // Carregar disciplinas do Supabase para o ecrã principal
+      supabaseService.getDisciplinas().then(disciplinas => {
+        if (disciplinas && disciplinas.length > 0) {
+          setSubjects(disciplinas);
+        }
+      }).catch(err => console.warn('Supabase getDisciplinas fetch notice:', err));
+    }
+  }, []);
+
+  const reloadDisciplinas = async () => {
+    try {
+      const liveDisciplinas = await supabaseService.getDisciplinas();
+      if (liveDisciplinas && liveDisciplinas.length > 0) {
+        setSubjects(liveDisciplinas);
+      }
+    } catch (err) {
+      console.warn('Erro ao recarregar disciplinas do Supabase:', err);
+    }
+  };
 
   const resetFilters = () => {
     setFilters(defaultFilters);
@@ -274,6 +339,27 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setTutors(prev => [newTutorProfile, ...prev]);
     setCurrentUser(newUser);
     setIsAuthModalOpen(false);
+
+    // Enviar para Supabase se configurado
+    if (isSupabaseConfigured) {
+      supabaseService.createTutor({
+        name: newTutorProfile.name,
+        title: newTutorProfile.title,
+        avatar_url: newTutorProfile.avatar,
+        bio: newTutorProfile.bio,
+        academic_degree: newTutorProfile.academicDegree,
+        institution: newTutorProfile.institution,
+        specialization: newTutorProfile.specialization,
+        subjects: newTutorProfile.subjects,
+        price_per_hour: newTutorProfile.pricePerHour,
+        modalities: newTutorProfile.modalities,
+        province: newTutorProfile.province,
+        municipality: newTutorProfile.municipality,
+        whatsapp: newTutorProfile.whatsapp,
+        phone: newTutorProfile.phone,
+        id_document_number: newTutorProfile.idDocumentNumber
+      }).catch(err => console.warn('Supabase tutor insert notice:', err));
+    }
   };
 
   const bookLesson = async (lessonData: {
@@ -352,6 +438,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setMessages(prev => [...prev, autoMsg]);
 
+    // Enviar para Supabase se configurado
+    if (isSupabaseConfigured) {
+      supabaseService.createLesson({
+        student_name: newLesson.studentName,
+        student_phone: newLesson.studentPhone,
+        tutor_name: newLesson.tutorName,
+        subject: newLesson.subject,
+        date: newLesson.date,
+        time: newLesson.time,
+        modality: newLesson.modality,
+        location_details: newLesson.locationDetails,
+        status: newLesson.status,
+        price_kz: newLesson.priceKz,
+        payment_status: newLesson.paymentStatus,
+        notes: newLesson.notes
+      }).catch(err => console.warn('Supabase lesson insert notice:', err));
+
+      supabaseService.createPayment({
+        tutor_name: newPayment.tutorName,
+        amount_kz: newPayment.amountKz,
+        method: newPayment.method,
+        multicaixa_phone: newPayment.multicaixaPhone,
+        reference_number: newPayment.referenceNumber,
+        status: newPayment.status,
+        plan_type: newPayment.planType
+      }).catch(err => console.warn('Supabase payment insert notice:', err));
+    }
+
     return { lesson: newLesson, payment: newPayment };
   };
 
@@ -374,6 +488,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setMessages(prev => [...prev, newMsg]);
+
+    if (isSupabaseConfigured) {
+      supabaseService.sendMessage({
+        conversation_id: receiverId,
+        sender_id: newMsg.senderId,
+        sender_name: newMsg.senderName,
+        receiver_id: receiverId,
+        text: newMsg.text
+      }).catch(err => console.warn('Supabase message insert notice:', err));
+    }
 
     // Simulated reply after 1.5 seconds if talking to tutor
     const targetTutor = tutors.find(t => t.id === receiverId || t.userId === receiverId);
@@ -413,6 +537,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setReviews(prev => [newRev, ...prev]);
+
+    if (isSupabaseConfigured) {
+      supabaseService.createReview({
+        student_name: newRev.studentName,
+        student_institution: newRev.studentInstitution,
+        rating: newRev.rating,
+        comment: newRev.comment,
+        subject: newRev.subject
+      }).catch(err => console.warn('Supabase review insert notice:', err));
+    }
 
     // Recalculate tutor rating
     setTutors(prev => prev.map(t => {
@@ -457,6 +591,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         currentUser,
         setCurrentUser,
+        isSupabaseConnected: isSupabaseConfigured,
         tutors,
         subjects,
         reviews,
@@ -487,6 +622,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setActiveView,
         isSmartphoneMode,
         setIsSmartphoneMode,
+        reloadDisciplinas,
         toggleFavorite,
         registerStudent,
         registerTutor,

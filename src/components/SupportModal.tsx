@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export const SupportModal: React.FC = () => {
-  const { isSupportModalOpen, setIsSupportModalOpen } = useApp();
+  const { isSupportModalOpen, setIsSupportModalOpen, isSupabaseConnected } = useApp();
 
   const [openFaq, setOpenFaq] = React.useState<number | null>(0);
 
@@ -122,6 +122,27 @@ export const SupportModal: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Supabase Connection Status Card */}
+          <div className="p-4 rounded-xl bg-black/40 border border-white/5 space-y-2 text-xs">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-white flex items-center gap-1.5">
+                <span className="text-[#3ECF8E] font-bold">⚡ Supabase</span>
+                <span>Base de Dados</span>
+              </span>
+              <span className={`text-[10px] px-2 py-0.5 rounded font-semibold ${isSupabaseConnected ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-300 border border-amber-500/20'}`}>
+                {isSupabaseConnected ? '● Conectado à Cloud' : '○ Modo Local / Demo (Pronto para Conectar)'}
+              </span>
+            </div>
+            <p className="text-slate-400 text-[11px] leading-relaxed">
+              O backend já está pré-configurado com a biblioteca <code className="text-amber-300">@supabase/supabase-js</code>. Para ligar à sua conta:
+            </p>
+            <ol className="list-decimal list-inside space-y-1 text-[11px] text-slate-300">
+              <li>Crie um projeto no <strong>supabase.com</strong>.</li>
+              <li>Execute o ficheiro <code className="text-amber-300 font-mono">supabase-schema.sql</code> no <strong>SQL Editor</strong> do Supabase.</li>
+              <li>Defina <code className="text-[#3ECF8E] font-mono">VITE_SUPABASE_URL</code> e <code className="text-[#3ECF8E] font-mono">VITE_SUPABASE_ANON_KEY</code> nas variáveis de ambiente.</li>
+            </ol>
           </div>
 
           {/* Legal and terms disclaimer */}

@@ -10,10 +10,13 @@ import {
   Code, 
   BarChart2, 
   BookOpen,
-  ArrowRight
+  ArrowRight,
+  Database,
+  RotateCw
 } from 'lucide-react';
 import { POPULAR_SUBJECTS } from '../data/mockData';
 import { ThreeDCard } from './ThreeDCard';
+import { getDisciplinas } from '../lib/supabase';
 
 const iconMap: Record<string, React.ReactNode> = {
   Calculator: <Calculator className="w-5 h-5 text-[#FFC72C]" />,
@@ -28,7 +31,17 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export const SubjectGrid: React.FC = () => {
-  const { setFilters, setActiveView } = useApp();
+  const { subjects, setFilters, setActiveView, reloadDisciplinas, isSupabaseConnected } = useApp();
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  const handleManualSync = async () => {
+    setIsRefreshing(true);
+    try {
+      await reloadDisciplinas();
+    } finally {
+      setTimeout(() => setIsRefreshing(false), 600);
+    }
+  };
 
   const handleSelectSubject = (subjectName: string) => {
     // Map broad subject names
@@ -44,8 +57,21 @@ export const SubjectGrid: React.FC = () => {
     <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-white/5">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#FFC72C] mb-2 tracking-wider uppercase">
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#FFC72C] mb-2 tracking-wider uppercase">
             <span>Explora por Área de Conhecimento</span>
+            <span className="text-white/20">·</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
+              <Database className="w-3 h-3 text-emerald-400" />
+              <span>Supabase Ativo ({subjects.length} Disciplinas)</span>
+            </span>
+            <button
+              onClick={handleManualSync}
+              disabled={isRefreshing}
+              className="p-1 rounded text-slate-400 hover:text-white transition-colors"
+              title="Sincronizar disciplinas com Supabase"
+            >
+              <RotateCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#FFC72C]' : ''}`} />
+            </button>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
             Matemática, Física, Direito, Contabilidade, Química, Economia... e muito mais
@@ -62,13 +88,13 @@ export const SubjectGrid: React.FC = () => {
           }}
           className="text-xs font-medium text-[#FFC72C] hover:text-amber-300 flex items-center gap-1.5 transition-colors self-start md:self-end"
         >
-          <span>Ver todas as 25+ disciplinas</span>
+          <span>Ver todas as {subjects.length}+ disciplinas</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {POPULAR_SUBJECTS.map((sub) => (
+        {subjects.map((sub) => (
           <ThreeDCard key={sub.id} depth={8} glowColor="rgba(224, 38, 54, 0.12)">
             <div
               onClick={() => handleSelectSubject(sub.name)}
